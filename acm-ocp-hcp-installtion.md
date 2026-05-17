@@ -1,30 +1,11 @@
 
 ## Hosted Control Planes installation
 
-Automating the deployment of a Hosted Control Plane (HCP / HyperShift) via RHACM requires a different approach than standard bare-metal clusters. **You do not use ZTP, SiteConfig, or ClusterInstance.** Instead, you sync the native HyperShift Custom Resources alongside your hardware inventory — directly via `oc apply` for a lab, or via OpenShift GitOps (ArgoCD) for production.
-
-> **Architectural Note: Late Binding vs. Early Binding**
-> * **Standard AI/ZTP (Early Binding):** A server powers on, and the system explicitly says, *"You belong to Edge-Cluster-01"* (via `InfraEnv.spec.clusterRef`).
-> * **HCP Automation (Late Binding):** Your Git repository (or `oc apply` flow) defines a generic hardware inventory pool (`InfraEnv` without a `clusterRef`). Servers sit in a "Ready" state. A `NodePool` later asks for *N workers from inventory*; the HCP provider reaches into the pool and binds matching Agents to the cluster.
+Automating the deployment of a Hosted Control Plane (HCP / HyperShift) via RHACM.
 
 ### Lab Topology
 
 This procedure simulates bare metal with KVM VMs and **sushy-emulator** providing the Redfish endpoint that BMO drives.
-
-    ┌──────────────────────────────┐         ┌───────────────────────────────┐
-    │   Hub / Management cluster   │         │      KVM Host (HP Z420)    │
-    │                              │         │        192.168.1.102
-                                   │
-    │  MCE + hypershift component  │ Redfish │   sushy-emulator :8000        │
-    │  Bare Metal Operator (BMO) ──┼───────▶│   libvirt                     │
-    │  Assisted Service            │   HTTP  │   br0  (bridged to LAN)       │
-    │  HyperShift Operator         │         │                               │
-    │  ACM hub                     │         │   ┌────────────────────┐      │
-    │                              │  ISO    │   │ VM hcp-worker-0    │      │
-    │  Assisted Image Service ─────┼─────────┼─▶│ (empty CDROM,      │      │
-    │  serves the discovery ISO    │  mount  │   │  UEFI boot)        │      │
-    └──────────────────────────────┘         │   └────────────────────┘      │
-                                             └───────────────────────────────┘
 
 Reachability requirements:
 - The hub must reach `IP_REDFISH:8000` on the KVM host (BMC commands).

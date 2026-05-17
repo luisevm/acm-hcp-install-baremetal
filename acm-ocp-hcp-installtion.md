@@ -16,18 +16,6 @@ Reachability requirements:
 
 ### Prerequisites
 
-#### Hub-cluster prerequisites
-
-| Requirement | Why it matters |
-|---|---|
-| MCE installed with the `hypershift` component enabled | Provides the HyperShift Operator. |
-| Bare Metal Operator (BMO) available | Reconciles BareMetalHost CRs. Ships with MCE. |
-| `Provisioning` CR with `watchAllNamespaces: true` | Wakes BMO. Without it, BMHs outside `openshift-machine-api` are silently ignored. |
-| `AgentServiceConfig` deployed | Hosts the Assisted Service that bakes discovery ISOs. |
-| DNS for `api.<HCP_NAME>.<DOMAIN>` and `*.apps.<HCP_NAME>.<DOMAIN>` | Workers and clients reach the hosted control plane through these names. |
-| MetalLB *or* external LB *or* NodePort + external DNS plan | The HCP API server is exposed from the ACM hub, not from the Hosted cluster workers. |
-| Storage class for `AgentServiceConfig` PVCs (LVMO/ODF/etc.) | Holds the database and every generated discovery ISO. |
-
 #### DNS records
 
 Create the following A records in your lab DNS (BIND, dnsmasq, etc.) before applying any manifests:

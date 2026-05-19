@@ -1318,3 +1318,8 @@ oc --kubeconfig $KUBECONFIG_HUB -n ${INFRAENV_NAMESPACE} delete infraenv     ${I
 oc --kubeconfig $KUBECONFIG_HUB -n ${INFRAENV_NAMESPACE} delete nmstateconfig ${HOSTNAME_NODE0}
 oc --kubeconfig $KUBECONFIG_HUB delete namespace ${INFRAENV_NAMESPACE}
 ```
+
+## References
+
+- Clusters:
+https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.16/html-single/clusters/index
